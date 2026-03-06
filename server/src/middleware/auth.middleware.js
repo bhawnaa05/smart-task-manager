@@ -1,18 +1,24 @@
 import jwt from "jsonwebtoken";
-import { ENV } from "../config/env.js";
+import "../config/env.js";
 
 export const authMiddleware = (req, res, next) => {
   try {
-    const token = req.cookies.accessToken;
 
-    if (!token) throw new Error("Unauthorized");
+    const token =
+      req.cookies.accessToken ||
+      req.headers.authorization?.split(" ")[1];
 
-    const decoded = jwt.verify(token, ENV.ACCESS_SECRET);
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(token, process.env.ACCESS_SECRET);
 
     req.user = decoded;
 
     next();
-  } catch {
+
+  } catch (error) {
     res.status(401).json({ message: "Invalid token" });
   }
 };

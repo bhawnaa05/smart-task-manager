@@ -6,7 +6,7 @@ import { errorMiddleware } from "./middleware/error.middleware.js";
 
 // Import routes
 import authRoutes from "./module/authentication/auth.routes.js";
-// import adminRoutes from "./module/admin/admin.routes.js";
+import adminRoutes from "./module/admin/admin.routes.js";
 // import managerRoutes from "./module/manager/manager.routes.js";
 // import employeeRoutes from "./module/employee/employee.routes.js";
 
@@ -27,7 +27,7 @@ app.use(
 // ROUTES
 
 app.use("/api/auth", authRoutes);
-// app.use("/api/admin", adminRoutes);
+app.use("/api/admin", adminRoutes);
 // app.use("/api/manager", managerRoutes);
 // app.use("/api/employee", employeeRoutes);
 
