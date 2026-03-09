@@ -1,5 +1,6 @@
 import { loginService } from "./auth.service.js";
 import { setAuthCookies } from "../../utils/cookie.utils.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
 
 export const login = async (req, res, next) => {
   try {
@@ -11,10 +12,9 @@ export const login = async (req, res, next) => {
       result.refreshToken
     );
 
-    res.json({
-      message: "Login successful",
-      user: result.user
-    });
+    res.json(
+      new ApiResponse(200, { user: result.user }, "Login successful")
+    );
   } catch (err) {
     next(err);
   }

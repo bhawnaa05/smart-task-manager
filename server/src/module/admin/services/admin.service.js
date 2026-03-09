@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { User } from "../../authentication/user.model.js";
 import { sendAccountCreatedNotification } from "../../notification/notification.service.js";
+import { ApiError } from "../../../utils/ApiError.js";
 
 export const createUserByAdmin = async (adminId, data) => {
 
@@ -9,7 +10,7 @@ export const createUserByAdmin = async (adminId, data) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-        throw new Error("User already exists");
+        throw new ApiError(409, "User already exists");
     }
 
     // generate temporary password
