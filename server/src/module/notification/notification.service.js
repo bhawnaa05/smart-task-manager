@@ -31,3 +31,32 @@ Smart Task Manager Team
     });
 
 };
+
+export const sendTaskAssignedNotification = async ({
+    managerName,
+    email,
+    taskTitle
+}) => {
+
+    const subject = "New Weekly Task Assigned";
+
+    const text = `
+Hello ${managerName},
+
+You have been assigned a new weekly task.
+
+Task: ${taskTitle}
+
+Please login to Smart Task Manager to view details.
+
+Regards,
+Smart Task Manager Team
+`;
+
+    await sendMail({
+        to: email,
+        subject,
+        text
+    });
+
+};

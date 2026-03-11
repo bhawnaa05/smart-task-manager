@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { User } from "../../authentication/user.model.js";
-import { sendAccountCreatedNotification } from "../../notification/notification.service.js";
+import { Task } from "../models/task.model.js";
+import { sendAccountCreatedNotification,sendTaskAssignedNotification } from "../../notification/notification.service.js";
 import { ApiError } from "../../../utils/ApiError.js";
 
 export const createUserByAdmin = async (adminId, data) => {
@@ -35,4 +36,33 @@ export const createUserByAdmin = async (adminId, data) => {
     });
 
     return user;
+};
+
+export const assignTaskToManager = async (adminId, data) => {
+
+    const { title, description, managerId, weekStart, weekEnd } = data;
+
+    const manager = await User.findById(managerId);
+
+    if (!manager || manager.role !== "manager") {
+        throw new ApiError(404, "Manager not found");
+    }
+
+    const task = await Task.create({
+        title,
+        description,
+        assignedTo: managerId,
+        assignedBy: adminId,
+        weekStart,
+        weekEnd
+    });
+
+    // send email
+    await sendTaskAssignedNotification({
+        managerName: manager.name,
+        email: manager.email,
+        taskTitle: title
+    });
+
+    return task;
 };

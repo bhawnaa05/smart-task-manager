@@ -1,5 +1,5 @@
 import express from "express";
-import { registerUser } from "./controllers/admin.controller.js";
+import { registerUser,assignTask  } from "./controllers/admin.controller.js";
 
 import { authMiddleware } from "../../middleware/auth.middleware.js";
 import { allowRoles } from "../../middleware/role.middleware.js";
@@ -11,6 +11,13 @@ router.post(
 authMiddleware,
 allowRoles("admin"),
 registerUser
+);
+
+router.post(
+"/assign-task",
+authMiddleware,
+allowRoles("admin"),
+assignTask
 );
 
 export default router;
